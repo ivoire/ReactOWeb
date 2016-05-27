@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+import json
 
 from django.db import models
 
@@ -21,3 +21,10 @@ class Message(models.Model):
 
     def __str__(self):
         return "%s %s (%s)" % (self.topic, self.datetime, self.username)
+
+    def as_dict(self):
+        return {"topic": self.topic,
+                "uuid": self.uuid,
+                "datetime": self.datetime.isoformat(),
+                "username": self.username,
+                "data": json.loads(self.data)}
