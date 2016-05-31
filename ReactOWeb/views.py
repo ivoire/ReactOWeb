@@ -1,7 +1,7 @@
 import json
 
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render
 
 from ReactOWeb.models import Message
 
@@ -25,3 +25,8 @@ def api_messages(request):
 
     messages = [m.as_dict() for m in query]
     return HttpResponse(json.dumps(messages), content_type="application/json")
+
+
+def api_messages_details(request, pk):
+    message = get_object_or_404(Message, pk=pk)
+    return HttpResponse(json.dumps(message.as_dict()), content_type="application/json")
