@@ -7,6 +7,10 @@ from django.shortcuts import get_object_or_404, render
 from ReactOWeb.models import Message
 
 
+def main(request):
+    return render(request, 'ReactOWeb/index.html', {})
+
+
 def api_messages(request):
     # Apply datetime>= and dateimt<=
     datetime_gt = request.GET.get('datetime>', None)
@@ -14,9 +18,11 @@ def api_messages(request):
 
     query = Message.objects.all()
     if datetime_gt is not None:
+        # TODO: handle crashes
         dt_gt = datetime.datetime.strptime(datetime_gt, '%Y-%m-%dT%H:%M:%S.%f')
         query = query.filter(datetime__gt=dt_gt)
     if datetime_lt is not None:
+        # TODO: handle crashes
         dt_lt = datetime.datetime.strptime(datetime_lt, '%Y-%m-%dT%H:%M:%S.%f')
         query = query.filter(datetime__lt=dt_lt)
 
@@ -40,4 +46,5 @@ def api_messages(request):
 
 def api_messages_details(request, pk):
     message = get_object_or_404(Message, pk=pk)
-    return HttpResponse(json.dumps(message.as_dict()), content_type="application/json")
+    return HttpResponse(json.dumps(message.as_dict()),
+                        content_type="application/json")
