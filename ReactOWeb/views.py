@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -7,7 +8,19 @@ from ReactOWeb.models import Message
 
 
 def api_messages(request):
-    # Get the limits and bounds
+    # Apply datetime>= and dateimt<=
+    datetime_gt = request.GET.get('datetime>', None)
+    datetime_lt = request.GET.get('datetime<', None)
+
+    query = Message.objects.all()
+    if datetime_gt is not None:
+        dt_gt = datetime.datetime.strptime(datetime_gt, '%Y-%m-%dT%H:%M:%S.%f')
+        query = query.filter(datetime__gt=dt_gt)
+    if datetime_lt is not None:
+        dt_lt = datetime.datetime.strptime(datetime_lt, '%Y-%m-%dT%H:%M:%S.%f')
+        query = query.filter(datetime__lt=dt_lt)
+
+    # Apply limit= and page=
     page = request.GET.get('page', 0)
     limit = request.GET.get('limit', None)
 
@@ -19,9 +32,7 @@ def api_messages(request):
             return HttpResponseBadRequest()
         if page < 0 or limit < 0:
             return HttpResponseBadRequest()
-        query = Message.objects.all()[page*limit:(page+1)*limit]
-    else:
-        query = Message.objects.all()
+        query = query[page*limit:(page+1)*limit]
 
     messages = [m.as_dict() for m in query]
     return HttpResponse(json.dumps(messages), content_type="application/json")
