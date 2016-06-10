@@ -1,0 +1,33 @@
+{% extends 'ReactOWeb/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block nav-home %}active{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+  <h1>Welcome to ReactOWeb</h1>
+  <p class="lead"><em>ReactOWeb</em> is the web frontend of <em>ReactOBus</em></p>
+  <p>It allows to browse and monitor events sent on the software bus implemened by ReactOBus.</p>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <h2>Event feed</h2>
+    <p>Watch the feed of live events as they arrive on the bus.</p>
+    <p>You can even have some reports on your architecture.</p>
+    <p><a class="btn btn-primary">Watch events &raquo;</a></p>
+  </div>
+
+  <div class="col-md-4">
+    <h2>Queries</h2>
+    <p>Use the REST API to query the database of events. Most classical operation are already available.</p>
+    <p><a class="btn btn-primary">Queries &raquo;</a></p>
+  </div>
+
+  <div class="col-md-4">
+    <h2>Getting help</h2>
+    <p>To get some help on what is available.</p>
+    <p><a class="btn btn-primary">Help &raquo;</a></p>
+  </div>
+</div>
+{% endblock body %}

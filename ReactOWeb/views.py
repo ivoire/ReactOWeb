@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404, render
 from ReactOWeb.models import Message
 
 
-def main(request):
-    return render(request, 'ReactOWeb/index.html', {})
+def home(request):
+    return render(request, 'ReactOWeb/home.html', {})
 
 
 def api_messages(request):
