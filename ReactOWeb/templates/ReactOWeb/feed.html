@@ -1,4 +1,5 @@
 {% extends 'ReactOWeb/base.html' %}
+{% load static %}
 
 {% block title %}Event feed{% endblock %}
 
@@ -22,7 +23,7 @@
 {% block body %}
 <div class="row">
   <div class="col-md-12">
-    <h2>Feed of events</h2>
+    <h2>Feed of events <a href="{% url 'messages.rss' %}"><img src="{% get_static_prefix %}ReactOWeb/img/syndication.png"></a></h2>
     <table class="table table-striped">
       <thead>
         <tr>
