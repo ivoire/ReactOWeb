@@ -11,6 +11,17 @@ def home(request):
     return render(request, 'ReactOWeb/home.html', {})
 
 
+def feed(request):
+    return render(request, 'ReactOWeb/feed.html',
+                  {'messages': Message.objects.all().order_by('-datetime')})
+
+
+def message(request, pk):
+    message = get_object_or_404(Message, pk=pk)
+    return render(request, 'ReactOWeb/message.html',
+                  {'message': message})
+
+
 def api_messages(request):
     # Apply datetime>= and dateimt<=
     datetime_gt = request.GET.get('datetime>', None)

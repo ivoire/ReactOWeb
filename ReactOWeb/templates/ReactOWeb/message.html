@@ -1,0 +1,40 @@
+{% extends 'ReactOWeb/base.html' %}
+{% load static %}
+
+{% block title %}Message{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/highlight-v9.4.0.css">
+{% endblock head %}
+
+{% block nav-feed %}active{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Message {{ message.pk }}</h2>
+    <dl class="dl-horizontal">
+      <dt>Datetime</dt>
+      <dd>{{ message.datetime|timesince }} ago</dd>
+      <dt>Topic</dt>
+      <dd>{{ message.topic }}</dd>
+      <dt>uuid</dt>
+      <dd>{{ message.uuid }}</dd>
+      <dt>Username</dt>
+      <dd>{{ message.username }}</dd>
+    </dl>
+    <pre>{{ message.pp_data|safe }}</pre>
+  </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<script src="{% get_static_prefix %}ReactOWeb/js/highlight-v9.4.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('pre').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+{% endblock script %}

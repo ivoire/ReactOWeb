@@ -19,6 +19,7 @@
   <style>
     {% block style %}{% endblock %}
   </style>
+  {% block head %}{% endblock %}
 </head>
 <body>
 <div class="container">
@@ -27,9 +28,9 @@
     <nav>
       <ul class="nav nav-justified">
         <li class="{% block nav-home %}{% endblock %}"><a href="{% url 'home' %}">Home</a></li>
-        <li><a class="{% block nav-feed %}{% endblock %}"href="#">Feed</a></li>
-        <li><a class="{% block nav-query %}{% endblock %}"href="#">Query</a></li>
-        <li><a class="{% block nav-help %}{% endblock %}"href="#">Help</a></li>
+        <li class="{% block nav-feed %}{% endblock %}"><a href="{% url 'feed' %}">Feed</a></li>
+        <li class="{% block nav-query %}{% endblock %}"><a href="#">Query</a></li>
+        <li class="{% block nav-help %}{% endblock %}"><a href="#">Help</a></li>
       </ul>
     </nav>
   </div>
@@ -45,5 +46,6 @@
 
   <script src="{% get_static_prefix %}ReactOWeb/js/jquery-v1.12.2.min.js"></script>
   <script src="{% get_static_prefix %}ReactOWeb/js/bootstrap-v3.3.6.min.js"></script>
+{% block script %}{% endblock %}
 </body>
 </html>

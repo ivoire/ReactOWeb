@@ -28,3 +28,7 @@ class Message(models.Model):
                 "datetime": self.datetime.isoformat(),
                 "username": self.username,
                 "data": json.loads(self.data)}
+
+    def pp_data(self):
+        print(json.dumps(json.loads(self.data), sort_keys=True, indent=4))
+        return json.dumps(json.loads(self.data), sort_keys=True, indent=4)

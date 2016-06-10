@@ -1,0 +1,35 @@
+{% extends 'ReactOWeb/base.html' %}
+
+{% block title %}Event feed{% endblock %}
+
+{% block nav-feed %}active{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Feed of events</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Datetime</th>
+          <th>Topic</th>
+          <th>uuid</th>
+          <th>username</th>
+          <th>data</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for message in messages %}
+        <tr>
+          <td title="{{ message.datetime }}">{{ message.datetime|timesince }}</td>
+          <td>{{ message.topic }}</td>
+          <td><a href="{% url 'message' message.id %}">{{ message.uuid }}</a></td>
+          <td>{{ message.username }}</td>
+          <td>{{ message.data|truncatechars:40 }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock body %}
