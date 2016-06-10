@@ -30,5 +30,4 @@ class Message(models.Model):
                 "data": json.loads(self.data)}
 
     def pp_data(self):
-        print(json.dumps(json.loads(self.data), sort_keys=True, indent=4))
         return json.dumps(json.loads(self.data), sort_keys=True, indent=4)
