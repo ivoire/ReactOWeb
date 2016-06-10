@@ -2,6 +2,21 @@
 
 {% block title %}Event feed{% endblock %}
 
+{% block style %}
+  .topic {
+    color: #333;
+  }
+  .topic:hover {
+    color: 23527C;
+  }
+  .username {
+    color: #333;
+  }
+  .username:hover {
+    color: 23527C;
+  }
+{% endblock style %}
+
 {% block nav-feed %}active{% endblock %}
 
 {% block body %}
@@ -22,9 +37,9 @@
       {% for message in messages %}
         <tr>
           <td title="{{ message.datetime }}">{{ message.datetime|timesince }}</td>
-          <td>{{ message.topic }}</td>
+          <td><a class="topic" href="?field=topic&value={{ message.topic }}">{{ message.topic }}</a></td>
           <td><a href="{% url 'message' message.id %}">{{ message.uuid }}</a></td>
-          <td>{{ message.username }}</td>
+          <td><a class="username" href="?field=username&value={{ message.username }}">{{ message.username }}</a></td>
           <td>{{ message.data|truncatechars:40 }}</td>
         </tr>
       {% endfor %}

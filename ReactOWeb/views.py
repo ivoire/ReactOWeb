@@ -12,8 +12,20 @@ def home(request):
 
 
 def feed(request):
+    # Filter if requested
+    field = request.GET.get("field", None)
+    value = request.GET.get("value", None)
+    query = Message.objects.all().order_by('-datetime')
+
+    if field is not None and value is not None:
+        if field == 'topic':
+            query = query.filter(topic=value)
+        elif field == 'username':
+            query = query.filter(username=value)
+        else:
+            return HttpResponseBadRequest()
     return render(request, 'ReactOWeb/feed.html',
-                  {'messages': Message.objects.all().order_by('-datetime')})
+                  {'messages': query})
 
 
 def message(request, pk):
