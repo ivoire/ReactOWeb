@@ -47,6 +47,20 @@
       {% endfor %}
       </tbody>
     </table>
+    <nav>
+      <ul class="pager">
+      {% if messages.has_previous %}
+        <li class="previous"><a href="?page={{ messages.previous_page_number }}{% if get_string %}&{{ get_string }}{% endif %}"><span aria-hidden="true">&larr;</span> Newer</a></li>
+      {% else %}
+        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Newer</a></li>
+      {% endif %}
+      {% if messages.has_next %}
+        <li class="next"><a href="?page={{ messages.next_page_number }}{% if get_string %}&{{ get_string }}{% endif %}">Older <span aria-hidden="true">&rarr;</span></a></li>
+      {% else %}
+        <li class="next disabled"><a href="#">Older <span aria-hidden="true">&rarr;</span></a></li>
+      {% endif %}
+      </ul>
+    </nav>
   </div>
 </div>
 {% endblock body %}

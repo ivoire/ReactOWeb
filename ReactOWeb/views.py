@@ -1,8 +1,10 @@
 import datetime
 import json
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
+from django.utils.http import urlencode
 
 from ReactOWeb.models import Message
 
@@ -16,6 +18,7 @@ def messages(request):
     field = request.GET.get("field", None)
     value = request.GET.get("value", None)
     query = Message.objects.all().order_by('-datetime')
+    get_string = ""
 
     if field is not None and value is not None:
         if field == 'topic':
@@ -24,8 +27,19 @@ def messages(request):
             query = query.filter(username=value)
         else:
             return HttpResponseBadRequest()
+
+        get_string = urlencode({"field": field, "value": value})
+
+    # Show the right page
+    paginator = Paginator(query, 25)
+    try:
+        page = paginator.page(request.GET.get('page', 1))
+    except (PageNotAnInteger, EmptyPage):
+        return HttpResponseBadRequest()
+
     return render(request, 'ReactOWeb/messages.html',
-                  {'messages': query})
+                  {'messages': page,
+                   'get_string': get_string})
 
 
 def messages_details(request, pk):
