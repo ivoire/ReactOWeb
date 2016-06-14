@@ -24,7 +24,7 @@ class Message(models.Model):
         return "%s %s (%s)" % (self.topic, self.datetime, self.username)
 
     def get_absolute_url(self):
-        return reverse('message', args=[str(self.id)])
+        return reverse('messages.details', args=[str(self.id)])
 
     def as_dict(self):
         return {"topic": self.topic,

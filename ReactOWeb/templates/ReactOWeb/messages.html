@@ -18,7 +18,7 @@
   }
 {% endblock style %}
 
-{% block nav-feed %}active{% endblock %}
+{% block nav-messages %}active{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -37,9 +37,10 @@
       <tbody>
       {% for message in messages %}
         <tr>
+          {% comment %}TODO: show the comple data on demand (some JS maybe){% endcomment %}
           <td title="{{ message.datetime }}">{{ message.datetime|timesince }}</td>
           <td><a class="topic" href="?field=topic&value={{ message.topic }}">{{ message.topic }}</a></td>
-          <td><a href="{% url 'message' message.id %}">{{ message.uuid }}</a></td>
+          <td><a href="{% url 'messages.details' message.id %}">{{ message.uuid }}</a></td>
           <td><a class="username" href="?field=username&value={{ message.username }}">{{ message.username }}</a></td>
           <td>{{ message.data|truncatechars:40 }}</td>
         </tr>

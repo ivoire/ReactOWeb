@@ -11,7 +11,7 @@ def home(request):
     return render(request, 'ReactOWeb/home.html', {})
 
 
-def feed(request):
+def messages(request):
     # Filter if requested
     field = request.GET.get("field", None)
     value = request.GET.get("value", None)
@@ -24,11 +24,11 @@ def feed(request):
             query = query.filter(username=value)
         else:
             return HttpResponseBadRequest()
-    return render(request, 'ReactOWeb/feed.html',
+    return render(request, 'ReactOWeb/messages.html',
                   {'messages': query})
 
 
-def message(request, pk):
+def messages_details(request, pk):
     message = get_object_or_404(Message, pk=pk)
     return render(request, 'ReactOWeb/message.html',
                   {'message': message})
