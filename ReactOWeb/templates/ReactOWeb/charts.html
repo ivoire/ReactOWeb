@@ -1,0 +1,44 @@
+{% extends 'ReactOWeb/base.html' %}
+{% load static %}
+
+{% block title %}Charts{% endblock %}
+
+{% block nav-charts %}active{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Topics</h2>
+    <canvas id="topics" height="100"></canvas>
+  </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<script src="{% get_static_prefix %}ReactOWeb/js/Chart-v2.1.5.min.js"></script>
+<script>
+$(document).ready(function() {
+  var ctx = $("#topics");
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for topic in topics %} "{{ topic.topic }}",{% endfor %}],
+        datasets: [{
+            label: '# of messages',
+            data: [{% for topic in topics %} "{{ topic.count }}",{% endfor %}],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+  })
+});
+</script>
+{% endblock script %}

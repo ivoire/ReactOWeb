@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.utils.http import urlencode
@@ -11,6 +12,12 @@ from ReactOWeb.models import Message
 
 def home(request):
     return render(request, 'ReactOWeb/home.html', {})
+
+
+def charts(request):
+    topics = Message.objects.values('topic').annotate(count=Count('topic'))
+    return render(request, "ReactOWeb/charts.html",
+                  {"topics": topics})
 
 
 def messages(request):

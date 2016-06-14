@@ -6,6 +6,7 @@ from ReactOWeb.feeds import MessageFeed
 
 urlpatterns = [
     url(r'^$', v.home, name='home'),
+    url(r'^charts/*', v.charts, name='charts'),
     url(r'^messages/$', v.messages, name='messages'),
     url(r'^messages/rss/$', MessageFeed(), name="messages.rss"),
     url(r'^messages/(?P<pk>\d+)/$', v.messages_details, name='messages.details'),
