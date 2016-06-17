@@ -27,7 +27,8 @@ class Message(models.Model):
         return reverse('messages.details', args=[str(self.id)])
 
     def as_dict(self):
-        return {"topic": self.topic,
+        return {"id": self.id,
+                "topic": self.topic,
                 "uuid": self.uuid,
                 "datetime": self.datetime.isoformat(),
                 "username": self.username,
