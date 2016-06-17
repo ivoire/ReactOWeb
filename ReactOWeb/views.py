@@ -56,6 +56,11 @@ def messages_details(request, pk):
                   {'message': message})
 
 
+def messages_live(request):
+    return render(request, 'ReactOWeb/messages_live.html',
+                  {'messages': Message.objects.order_by('-datetime')[0:30]})
+
+
 def api_messages(request):
     # Apply datetime>= and dateimt<=
     datetime_gt = request.GET.get('datetime>', None)

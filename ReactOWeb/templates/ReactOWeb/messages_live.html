@@ -1,0 +1,80 @@
+{% extends 'ReactOWeb/base.html' %}
+{% load static %}
+
+{% block title %}Event feed{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/font-awesome-v4.6.3.min.css">
+{% endblock %}
+{% block nav-live %}active{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Live feed <i class="fa fa-spinner fa-pulse"></i></h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Datetime</th>
+          <th>Topic</th>
+          <th>uuid</th>
+          <th>username</th>
+          <th>data</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for message in messages %}
+        <tr>
+          <td>{{ message.datetime.isoformat }}</td>
+          <td>{{ message.topic }}</td>
+          <td><a href="{% url 'messages.details' message.id %}">{{ message.uuid }}</a></td>
+          <td>{{ message.username }}</td>
+          <td>{{ message.data|truncatechars:40 }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<script>
+  $(document).ready(
+    function() {
+      var api_url = "{% url 'api.messages' %}";
+      var last_dt = "{{ messages.0.datetime.isoformat }}";
+      var inserting_node = $('tbody');
+      setTimeout(poll, 5000);
+      function poll() {
+        var poll_url = api_url;
+        if(last_dt != 0) {
+          poll_url += '?datetime>=' + encodeURIComponent(last_dt);
+        }
+        $.ajax({
+          url: poll_url,
+          success: function(data, success, xhr) {
+            for(var i = data.length - 1; i >= 0; i--) {
+              var d = data[i];
+              last_dt = d['datetime'];
+              var tr = $('<tr></tr>');
+              tr.append($('<td></td>').text(d['datetime']));
+              tr.append($('<td></td>').text(d['topic']));
+              var link = $('<a href="/messages/' + d['id'] + '/"></a>').text(d['uuid']);
+              tr.append($('<td></td>').append(link));
+              tr.append($('<td></td>').text(d['username']));
+              tr.append($('<td></td>').text(JSON.stringify(d['data']).slice(0, 37) + '...'));
+              if(inserting_node.children().length != 0) {
+                tr.insertBefore(inserting_node.children()[0]);
+              } else {
+                inserting_node.append(tr);
+              }
+            }
+            setTimeout(poll, 5000);
+          }
+        });
+      }
+    }
+  );
+</script>
+{% endblock script %}
