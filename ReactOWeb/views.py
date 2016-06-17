@@ -1,4 +1,5 @@
 import datetime
+import dateutil.parser
 import json
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -24,7 +25,7 @@ def messages(request):
     # Filter if requested
     field = request.GET.get("field", None)
     value = request.GET.get("value", None)
-    query = Message.objects.all().order_by('-datetime')
+    query = Message.objects.order_by('-datetime')
     get_string = ""
 
     if field is not None and value is not None:
@@ -63,11 +64,11 @@ def api_messages(request):
     query = Message.objects.all()
     if datetime_gt is not None:
         # TODO: handle crashes
-        dt_gt = datetime.datetime.strptime(datetime_gt, '%Y-%m-%dT%H:%M:%S.%f')
+        dt_gt = dateutil.parser.parse(datetime_gt)
         query = query.filter(datetime__gt=dt_gt)
     if datetime_lt is not None:
         # TODO: handle crashes
-        dt_lt = datetime.datetime.strptime(datetime_lt, '%Y-%m-%dT%H:%M:%S.%f')
+        dt_lt = dateutil.parser.parse(datetime_lt)
         query = query.filter(datetime__lt=dt_lt)
 
     # Apply limit= and page=
