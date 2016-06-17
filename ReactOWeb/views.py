@@ -61,7 +61,7 @@ def api_messages(request):
     datetime_gt = request.GET.get('datetime>', None)
     datetime_lt = request.GET.get('datetime<', None)
 
-    query = Message.objects.all()
+    query = Message.objects.order_by('-datetime')
     if datetime_gt is not None:
         # TODO: handle crashes
         dt_gt = dateutil.parser.parse(datetime_gt)
