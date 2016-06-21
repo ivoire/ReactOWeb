@@ -6,6 +6,12 @@
 {% block head %}
   <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/font-awesome-v4.6.3.min.css">
 {% endblock %}
+
+{% block style %}
+  .new_line {
+    color: red;
+  }
+{% endblock %}
 {% block nav-live %}active{% endblock %}
 
 {% block body %}
@@ -54,10 +60,13 @@
         $.ajax({
           url: poll_url,
           success: function(data, success, xhr) {
+            if(data.length > 0) {
+              $('.new_line').removeClass('new_line');
+            }
             for(var i = data.length - 1; i >= 0; i--) {
               var d = data[i];
               last_dt = d['datetime'];
-              var tr = $('<tr></tr>');
+              var tr = $('<tr class="new_line"></tr>');
               tr.append($('<td></td>').text(d['datetime']));
               tr.append($('<td></td>').text(d['topic']));
               var link = $('<a href="/messages/' + d['id'] + '/"></a>').text(d['uuid']);
