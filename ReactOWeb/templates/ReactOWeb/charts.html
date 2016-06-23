@@ -31,7 +31,7 @@ $(document).ready(function() {
     data: {
         labels: [{% for msg in messages_by_hours %} "{{ msg.0 }}",{% endfor %}],
         datasets: [{
-            label: '# of messages by day',
+            label: '# of messages by hour',
             data: [{% for msg in messages_by_hours %} "{{ msg.1 }}",{% endfor %}],
             fill: true,
             backgroundColor: "rgba(75,192,192,0.4)",

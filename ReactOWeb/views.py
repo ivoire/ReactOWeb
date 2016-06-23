@@ -18,21 +18,33 @@ def home(request):
 
 def charts(request):
     # List of topics
+    # TODO: sort topics by name
     topics = Message.objects.values('topic').annotate(count=Count('topic'))
 
     # Messages for the last day, hour-by-hour
     now = datetime.utcnow().replace(tzinfo=utc)
     messages_by_hours = []
-    for hour in range(24, 0, -1):
-        count = Message.objects.filter(datetime__range=(now-timedelta(0, hour * 3600), now-timedelta(0, (hour - 1) * 3600))).count()
-        messages_by_hours.append((hour, count))
+    now_hours = datetime(now.year, now.month, now.day, now.hour, tzinfo=utc)
+    for hour in range(23, 0, -1):
+        dt_begin = now_hours - timedelta(hours=hour)
+        dt_end = now_hours - timedelta(hours=(hour - 1))
+        count = Message.objects.filter(datetime__range=(dt_begin, dt_end)).count()
+        messages_by_hours.append((dt_begin.hour, count))
+    # Get the last interval (now_hours to now)
+    count = Message.objects.filter(datetime__range=(now_hours, now)).count()
+    messages_by_hours.append(('now', count))
 
     # Messages for the last month, day-by-day
     now = datetime.utcnow().replace(tzinfo=utc)
     messages_by_days = []
+    now_days = datetime(now.year, now.month, now.day, tzinfo=utc)
     for day in range(30, 0, -1):
-        count = Message.objects.filter(datetime__range=(now-timedelta(day), now-timedelta(day - 1))).count()
-        messages_by_days.append(((now-timedelta(day)).strftime('%b %d'), count))
+        dt_begin = now_days - timedelta(days=day)
+        dt_end = now_days - timedelta(days=(day - 1))
+        count = Message.objects.filter(datetime__range=(dt_begin, dt_end)).count()
+        messages_by_days.append((dt_begin.strftime('%b %d'), count))
+    count = Message.objects.filter(datetime__range=(now_days, now)).count()
+    messages_by_days.append(('now', count))
 
     return render(request, "ReactOWeb/charts.html",
                   {"topics": topics,
