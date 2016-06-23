@@ -69,31 +69,27 @@ $(document).ready(function() {
             pointHoverBorderWidth: 2,
             pointHitRadius: 10,
         }]
-    },
-    options: {
     }
-  })
+  });
 
   var topicChart = new Chart($("#topics"), {
     type: 'bar',
     data: {
-        labels: [{% for topic in topics %} "{{ topic.topic }}",{% endfor %}],
-        datasets: [{
-            label: '# of messages',
-            data: [{% for topic in topics %} "{{ topic.count }}",{% endfor %}],
-            borderWidth: 1
-        }]
+      labels: [{% for topic in topics %}"{{ topic.topic }}", {% endfor %}],
+      datasets: [{
+        label: '# of messages',
+        data: [{% for topic in topics %}"{{ topic.count }}", {% endfor %}],
+        backgroundColor: [{% for topic in topics %}"hsl(" + {{ forloop.counter0 }} * (360 / {{ topics|length }}) % 360 + ", 55%, 70%)", {% endfor %}],
+        borderColor: [{% for topic in topics %}"hsl(" + {{ forloop.counter0 }} * (360 / {{ topics|length }}) % 360 + ", 55%, 50%)", {% endfor %}],
+        borderWidth: 2,
+      }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
+      legend: {
+        display: false
+      }
     }
-  })
+  });
 });
 </script>
 {% endblock script %}
