@@ -1,4 +1,4 @@
-import datetime
+from datetime import timedelta
 import dateutil.parser
 import json
 
@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.utils.http import urlencode
+from django.utils.timezone import datetime, utc
 
 from ReactOWeb.models import Message
 
@@ -16,9 +17,27 @@ def home(request):
 
 
 def charts(request):
+    # List of topics
     topics = Message.objects.values('topic').annotate(count=Count('topic'))
+
+    # Messages for the last day, hour-by-hour
+    now = datetime.utcnow().replace(tzinfo=utc)
+    messages_by_hours = []
+    for hour in range(24, 0, -1):
+        count = Message.objects.filter(datetime__range=(now-timedelta(0, hour * 3600), now-timedelta(0, (hour - 1) * 3600))).count()
+        messages_by_hours.append((hour, count))
+
+    # Messages for the last month, day-by-day
+    now = datetime.utcnow().replace(tzinfo=utc)
+    messages_by_days = []
+    for day in range(30, 0, -1):
+        count = Message.objects.filter(datetime__range=(now-timedelta(day), now-timedelta(day - 1))).count()
+        messages_by_days.append(((now-timedelta(day)).strftime('%b %d'), count))
+
     return render(request, "ReactOWeb/charts.html",
-                  {"topics": topics})
+                  {"topics": topics,
+                   "messages_by_hours": messages_by_hours,
+                   "messages_by_days": messages_by_days})
 
 
 def messages(request):
