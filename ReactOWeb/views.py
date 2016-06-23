@@ -17,10 +17,6 @@ def home(request):
 
 
 def charts(request):
-    # List of topics
-    # TODO: sort topics by name
-    topics = Message.objects.values('topic').annotate(count=Count('topic'))
-
     # Messages for the last day, hour-by-hour
     now = datetime.utcnow().replace(tzinfo=utc)
     messages_by_hours = []
@@ -46,10 +42,15 @@ def charts(request):
     count = Message.objects.filter(datetime__range=(now_days, now)).count()
     messages_by_days.append(('now', count))
 
+    # List of topics
+    topics = Message.objects.filter(datetime__gt=(now - timedelta(days=30)))
+    topics = topics.values('topic').annotate(count=Count('topic'))
+    topics = topics.order_by('topic')
+
     return render(request, "ReactOWeb/charts.html",
-                  {"topics": topics,
-                   "messages_by_hours": messages_by_hours,
-                   "messages_by_days": messages_by_days})
+                  {"messages_by_hours": messages_by_hours,
+                   "messages_by_days": messages_by_days,
+                   "topics": topics})
 
 
 def messages(request):
