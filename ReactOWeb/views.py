@@ -25,7 +25,7 @@ def charts(request):
         dt_begin = now_hours - timedelta(hours=hour)
         dt_end = now_hours - timedelta(hours=(hour - 1))
         count = Message.objects.filter(datetime__range=(dt_begin, dt_end)).count()
-        messages_by_hours.append((dt_begin.hour, count))
+        messages_by_hours.append(("%dh" % dt_begin.hour, count))
     # Get the last interval (now_hours to now)
     count = Message.objects.filter(datetime__range=(now_hours, now)).count()
     messages_by_hours.append(('now', count))
@@ -40,7 +40,7 @@ def charts(request):
         count = Message.objects.filter(datetime__range=(dt_begin, dt_end)).count()
         messages_by_days.append((dt_begin.strftime('%b %d'), count))
     count = Message.objects.filter(datetime__range=(now_days, now)).count()
-    messages_by_days.append(('now', count))
+    messages_by_days.append(('today', count))
 
     # List of topics
     topics = Message.objects.filter(datetime__gt=(now - timedelta(days=30)))
