@@ -17,6 +17,12 @@ def home(request):
 
 
 def charts(request):
+    # Filter the topic if requested
+    topic_prefix = request.GET.get("topic", None)
+    base_query = Message.objects.all()
+    if topic_prefix is not None:
+        base_query = Message.objects.filter(topic__startswith=topic_prefix)
+
     # Messages for the last day, hour-by-hour
     now = datetime.utcnow().replace(tzinfo=utc)
     messages_by_hours = []
@@ -24,10 +30,10 @@ def charts(request):
     for hour in range(23, 0, -1):
         dt_begin = now_hours - timedelta(hours=hour)
         dt_end = now_hours - timedelta(hours=(hour - 1))
-        count = Message.objects.filter(datetime__range=(dt_begin, dt_end)).count()
+        count = base_query.filter(datetime__range=(dt_begin, dt_end)).count()
         messages_by_hours.append(("%dh" % dt_begin.hour, count))
     # Get the last interval (now_hours to now)
-    count = Message.objects.filter(datetime__range=(now_hours, now)).count()
+    count = base_query.filter(datetime__range=(now_hours, now)).count()
     messages_by_hours.append(('now', count))
 
     # Messages for the last month, day-by-day
@@ -37,13 +43,13 @@ def charts(request):
     for day in range(30, 0, -1):
         dt_begin = now_days - timedelta(days=day)
         dt_end = now_days - timedelta(days=(day - 1))
-        count = Message.objects.filter(datetime__range=(dt_begin, dt_end)).count()
+        count = base_query.filter(datetime__range=(dt_begin, dt_end)).count()
         messages_by_days.append((dt_begin.strftime('%b %d'), count))
-    count = Message.objects.filter(datetime__range=(now_days, now)).count()
+    count = base_query.filter(datetime__range=(now_days, now)).count()
     messages_by_days.append(('today', count))
 
     # List of topics
-    topics = Message.objects.filter(datetime__gt=(now - timedelta(days=30)))
+    topics = base_query.filter(datetime__gt=(now - timedelta(days=30)))
     topics = topics.values('topic').annotate(count=Count('topic'))
     topics = topics.order_by('topic')
 
