@@ -32,7 +32,7 @@ from ReactOWeb.models import Message
 
 
 def home(request):
-    return render(request, 'ReactOWeb/home.html', {})
+    return render(request, "ReactOWeb/home.html", {})
 
 
 def charts(request):
@@ -53,7 +53,7 @@ def charts(request):
         messages_by_hours.append(("%dh" % dt_begin.hour, count))
     # Get the last interval (now_hours to now)
     count = base_query.filter(datetime__range=(now_hours, now)).count()
-    messages_by_hours.append(('now', count))
+    messages_by_hours.append(("now", count))
 
     # Messages for the last month, day-by-day
     now = datetime.utcnow().replace(tzinfo=utc)
@@ -63,32 +63,37 @@ def charts(request):
         dt_begin = now_days - timedelta(days=day)
         dt_end = now_days - timedelta(days=(day - 1))
         count = base_query.filter(datetime__range=(dt_begin, dt_end)).count()
-        messages_by_days.append((dt_begin.strftime('%b %d'), count))
+        messages_by_days.append((dt_begin.strftime("%b %d"), count))
     count = base_query.filter(datetime__range=(now_days, now)).count()
-    messages_by_days.append(('today', count))
+    messages_by_days.append(("today", count))
 
     # List of topics
     topics = base_query.filter(datetime__gt=(now - timedelta(days=30)))
-    topics = topics.values('topic').annotate(count=Count('topic'))
-    topics = topics.order_by('topic')
+    topics = topics.values("topic").annotate(count=Count("topic"))
+    topics = topics.order_by("topic")
 
-    return render(request, "ReactOWeb/charts.html",
-                  {"messages_by_hours": messages_by_hours,
-                   "messages_by_days": messages_by_days,
-                   "topics": topics})
+    return render(
+        request,
+        "ReactOWeb/charts.html",
+        {
+            "messages_by_hours": messages_by_hours,
+            "messages_by_days": messages_by_days,
+            "topics": topics,
+        },
+    )
 
 
 def messages(request):
     # Filter if requested
     field = request.GET.get("field", None)
     value = request.GET.get("value", None)
-    query = Message.objects.order_by('-datetime')
+    query = Message.objects.order_by("-datetime")
     get_string = ""
 
     if field is not None and value is not None:
-        if field == 'topic':
+        if field == "topic":
             query = query.filter(topic=value)
-        elif field == 'username':
+        elif field == "username":
             query = query.filter(username=value)
         else:
             return HttpResponseBadRequest()
@@ -98,32 +103,34 @@ def messages(request):
     # Show the right page
     paginator = Paginator(query, 25)
     try:
-        page = paginator.page(request.GET.get('page', 1))
+        page = paginator.page(request.GET.get("page", 1))
     except (PageNotAnInteger, EmptyPage):
         return HttpResponseBadRequest()
 
-    return render(request, 'ReactOWeb/messages.html',
-                  {'messages': page,
-                   'get_string': get_string})
+    return render(
+        request, "ReactOWeb/messages.html", {"messages": page, "get_string": get_string}
+    )
 
 
 def messages_details(request, pk):
     message = get_object_or_404(Message, pk=pk)
-    return render(request, 'ReactOWeb/message.html',
-                  {'message': message})
+    return render(request, "ReactOWeb/message.html", {"message": message})
 
 
 def messages_live(request):
-    return render(request, 'ReactOWeb/messages_live.html',
-                  {'messages': Message.objects.order_by('-datetime')[0:30]})
+    return render(
+        request,
+        "ReactOWeb/messages_live.html",
+        {"messages": Message.objects.order_by("-datetime")[0:30]},
+    )
 
 
 def api_messages(request):
     # Apply datetime>= and dateimt<=
-    datetime_gt = request.GET.get('datetime>', None)
-    datetime_lt = request.GET.get('datetime<', None)
+    datetime_gt = request.GET.get("datetime>", None)
+    datetime_lt = request.GET.get("datetime<", None)
 
-    query = Message.objects.order_by('-datetime')
+    query = Message.objects.order_by("-datetime")
     if datetime_gt is not None:
         # TODO: handle crashes
         dt_gt = dateutil.parser.parse(datetime_gt)
@@ -134,8 +141,8 @@ def api_messages(request):
         query = query.filter(datetime__lt=dt_lt)
 
     # Apply limit= and page=
-    page = request.GET.get('page', 0)
-    limit = request.GET.get('limit', None)
+    page = request.GET.get("page", 0)
+    limit = request.GET.get("limit", None)
 
     if limit is not None:
         try:
@@ -145,7 +152,7 @@ def api_messages(request):
             return HttpResponseBadRequest()
         if page < 0 or limit < 0:
             return HttpResponseBadRequest()
-        query = query[page*limit:(page+1)*limit]
+        query = query[page * limit : (page + 1) * limit]
 
     messages = [m.as_dict() for m in query]
     return HttpResponse(json.dumps(messages), content_type="application/json")
@@ -153,5 +160,4 @@ def api_messages(request):
 
 def api_messages_details(request, pk):
     message = get_object_or_404(Message, pk=pk)
-    return HttpResponse(json.dumps(message.as_dict()),
-                        content_type="application/json")
+    return HttpResponse(json.dumps(message.as_dict()), content_type="application/json")

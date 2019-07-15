@@ -9,23 +9,27 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('topic', models.TextField(db_index=True)),
-                ('uuid', models.TextField(db_index=True)),
-                ('datetime', models.DateTimeField(db_index=True)),
-                ('username', models.TextField(db_index=True)),
-                ('data', models.TextField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("topic", models.TextField(db_index=True)),
+                ("uuid", models.TextField(db_index=True)),
+                ("datetime", models.DateTimeField(db_index=True)),
+                ("username", models.TextField(db_index=True)),
+                ("data", models.TextField()),
             ],
-            options={
-                'managed': False,
-                'db_table': 'messages',
-            },
-        ),
+            options={"managed": False, "db_table": "messages"},
+        )
     ]
