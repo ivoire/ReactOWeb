@@ -19,8 +19,8 @@
 
 import json
 
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 
 
 class Message(models.Model):
