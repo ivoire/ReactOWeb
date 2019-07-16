@@ -1,9 +1,9 @@
 {% extends 'ReactOWeb/base.html' %}
 {% load static %}
 
-{% block title %}Charts{% endblock %}
+{% block title %} - Charts{% endblock %}
 
-{% block nav-charts %}active{% endblock %}
+{% block nav_charts %}active{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -22,8 +22,8 @@
 </div>
 {% endblock body %}
 
-{% block script %}
-<script src="{% get_static_prefix %}ReactOWeb/js/Chart-v2.1.5.min.js"></script>
+{% block scripts %}
+<script src="{% get_static_prefix %}ReactOWeb/js/chart-v2.7.2.min.js"></script>
 <script>
 $(document).ready(function() {
   var messages_by_hours = new Chart($("#messages_by_hours"), {
@@ -92,4 +92,4 @@ $(document).ready(function() {
   });
 });
 </script>
-{% endblock script %}
+{% endblock scripts %}

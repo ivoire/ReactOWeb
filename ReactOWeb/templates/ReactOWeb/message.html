@@ -4,10 +4,10 @@
 {% block title %}Message{% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/highlight-v9.4.0.css">
+  <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/highlight-v9.15.8.min.css">
 {% endblock head %}
 
-{% block nav-messages %}active{% endblock %}
+{% block nav_messages %}active{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -28,8 +28,8 @@
 </div>
 {% endblock body %}
 
-{% block script %}
-<script src="{% get_static_prefix %}ReactOWeb/js/highlight-v9.4.0.min.js"></script>
+{% block scripts %}
+<script src="{% get_static_prefix %}ReactOWeb/js/highlight-v9.15.8.min.js"></script>
 <script>
 $(document).ready(function() {
   $('pre').each(function(i, block) {
@@ -37,4 +37,4 @@ $(document).ready(function() {
   });
 });
 </script>
-{% endblock script %}
+{% endblock scripts %}

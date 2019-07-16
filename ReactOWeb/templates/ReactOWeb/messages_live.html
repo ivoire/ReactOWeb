@@ -1,25 +1,21 @@
 {% extends 'ReactOWeb/base.html' %}
 {% load static %}
 
-{% block title %}Event feed{% endblock %}
-
-{% block head %}
-  <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/font-awesome-v4.6.3.min.css">
-{% endblock %}
+{% block title %} - messages feed{% endblock %}
 
 {% block style %}
   .new_line {
     color: red;
   }
 {% endblock %}
-{% block nav-live %}active{% endblock %}
+{% block nav_live %}active{% endblock %}
 
 {% block body %}
 <div class="row">
-  <div class="col-md-12">
+  <div class="col">
     <h2>Live feed <i class="fa fa-spinner fa-pulse"></i></h2>
     <table class="table table-striped">
-      <thead>
+      <thead class="thead-light">
         <tr>
           <th>Datetime</th>
           <th>Topic</th>
@@ -35,7 +31,7 @@
           <td>{{ message.topic }}</td>
           <td><a href="{% url 'messages.details' message.id %}">{{ message.uuid }}</a></td>
           <td>{{ message.username }}</td>
-          <td>{{ message.data|truncatechars:40 }}</td>
+          <td>{{ message.data|truncatechars:10 }}</td>
         </tr>
       {% endfor %}
       </tbody>
@@ -44,7 +40,7 @@
 </div>
 {% endblock body %}
 
-{% block script %}
+{% block scripts %}
 <script>
   $(document).ready(
     function() {
@@ -72,7 +68,7 @@
               var link = $('<a href="/messages/' + d['id'] + '/"></a>').text(d['uuid']);
               tr.append($('<td></td>').append(link));
               tr.append($('<td></td>').text(d['username']));
-              tr.append($('<td></td>').text(JSON.stringify(d['data']).slice(0, 37) + '...'));
+              tr.append($('<td></td>').text(JSON.stringify(d['data']).slice(0, 7) + '...'));
               if(inserting_node.children().length != 0) {
                 tr.insertBefore(inserting_node.children()[0]);
               } else {
@@ -86,4 +82,4 @@
     }
   );
 </script>
-{% endblock script %}
+{% endblock scripts %}
