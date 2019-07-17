@@ -1,4 +1,7 @@
+import contextlib
 import os
+import pathlib
+import yaml
 
 DEBUG = os.environ.get("DEBUG", False)
 ALLOWED_HOSTS = ["*"]
@@ -18,18 +21,11 @@ MIDDLEWARE = [
 WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# Load from environment
-if "DB_ENGINE" in os.environ:
-    DATABASES = {
-        "default": {
-            "ENGINE": os.environ["DB_ENGINE"],
-            "NAME": os.environ["DB_NAME"],
-            "USER": os.environ["DB_USER"],
-            "PASSWORD": os.environ["DB_PASSWORD"],
-            "HOST": os.environ["DB_HOST"],
-            "PORT": os.environ["DB_PORT"],
-        }
-    }
+# Load settings from the configuration file
+with contextlib.suppress(FileNotFoundError):
+    data = pathlib.Path("/etc/reactoweb.yaml").read_text(encoding="utf-8")
+    for (k, v) in yaml.safe_load(data).items():
+        globals()[k] = v
 
 # Add sentry if SENTRY_DSN is defined
 if "SENTRY_DSN" in os.environ:

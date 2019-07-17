@@ -24,12 +24,7 @@ else
   docker container run --name "$CONTAINER_NAME" -d \
       --restart always \
       --add-host "postgresql:172.17.0.1" \
-      -p 9002:80 \
-      -e DB_ENGINE="$DB_ENGINE" \
-      -e DB_NAME="$DB_NAME" \
-      -e DB_USER="$DB_USER" \
-      -e DB_PASSWORD="$DB_PASSWORD" \
-      -e DB_HOST="$DB_HOST" \
-      -e DB_PORT="$DB_PORT" \
+      -p 9010:80 \
+      -v "/etc/reactoweb.yaml:/etc/reactoweb.yaml" \
       "$CI_REGISTRY_IMAGE:latest"
 fi
