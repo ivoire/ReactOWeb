@@ -3,6 +3,9 @@
 
 {% block title %} - messages{% endblock %}
 
+{% block head %}
+<link rel="alternate" type="application/rss+xml" title="RSS feed" href="{% url 'messages.rss' %}" />
+{% endblock head %}
 {% block style %}
   .topic {
     color: #333;
@@ -23,7 +26,7 @@
 {% block body %}
 <div class="row">
   <div class="col">
-    <h2>Messages <a href="{% url 'messages.rss' %}"><img src="{% get_static_prefix %}ReactOWeb/img/syndication.png"></a></h2>
+    <h2>Messages <a href="{% url 'messages.rss' %}"><i class="fas fa-rss"></i></a></h2>
     <table class="table table-striped">
       <thead class="thead-light">
         <tr>
