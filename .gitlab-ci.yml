@@ -63,3 +63,19 @@ sast:
 docker:
   <<: *dind
   stage: build
+
+##########
+# Deploy #
+##########
+reactoweb:
+  <<: *job
+  stage: deploy
+  tags: [deploy]
+  only:
+    refs:
+    - master
+  variables:
+    CONTAINER_NAME: "reactoweb"
+  environment:
+    name: reactoweb
+    url: https://bus.lavasoftware.org/
