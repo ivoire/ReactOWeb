@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install dependencies
 RUN apt-get update -q ;\
-    apt-get install --no-install-recommends --yes gunicorn3 libjs-jquery python3 python3-pip python3-django python3-dateutil python3-yaml ;\
+    apt-get install --no-install-recommends --yes gunicorn3 libjs-jquery python3 python3-pip python3-django python3-dateutil python3-psycopg2 python3-yaml ;\
     python3 -m pip install --upgrade whitenoise ;\
     # Cleanup
     apt-get clean ;\
