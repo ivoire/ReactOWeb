@@ -4,7 +4,7 @@
 {% block title %}Message{% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{% get_static_prefix %}ReactOWeb/css/highlight-v9.15.8.min.css">
+  <link rel="stylesheet" href="{% static "ReactOWeb/css/highlight-v9.15.8.min.css" %}">
 {% endblock head %}
 
 {% block nav_messages %}active{% endblock %}
@@ -29,7 +29,7 @@
 {% endblock body %}
 
 {% block scripts %}
-<script src="{% get_static_prefix %}ReactOWeb/js/highlight-v9.15.8.min.js"></script>
+<script src="{% static "ReactOWeb/js/highlight-v9.15.8.min.js" %}"></script>
 <script>
 $(document).ready(function() {
   $('pre').each(function(i, block) {

@@ -23,7 +23,7 @@
 {% endblock body %}
 
 {% block scripts %}
-<script src="{% get_static_prefix %}ReactOWeb/js/chart-v2.7.2.min.js"></script>
+<script src="{% static "ReactOWeb/js/chart-v2.7.2.min.js" %}"></script>
 <script>
 $(document).ready(function() {
   var messages_by_hours = new Chart($("#messages_by_hours"), {
